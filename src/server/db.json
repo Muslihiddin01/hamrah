@@ -1,0 +1,254 @@
+{
+  "apartments": [
+    {
+      "id": 1,
+      "title": "3-room apartment near university",
+      "price": 200,
+      "rooms": 3,
+      "district": "Sahovat",
+      "images": [
+        "apt1-1.jpg",
+        "apt1-2.jpg"
+      ],
+      "description": "Spacious apartment with balcony, kitchen, Wi-Fi, fully furnished living room. Perfect for students looking for shared accommodation.",
+      "coordinates": {
+        "lat": 38.55,
+        "lng": 68.78
+      },
+      "ownerId": 1,
+      "ownerName": "Alice",
+      "ownerImage": "alice.jpg",
+      "contacts": {
+        "phone": "+992901234567",
+        "email": "alice@example.com"
+      },
+      "hasDiscount": false,
+      "maxPeople": 4,
+      "users": [
+        {
+          "name": "Bob",
+          "birthYear": 2002,
+          "city": "Dushanbe",
+          "country": "Tajikistan",
+          "userImage": "bob.jpg"
+        },
+        {
+          "name": "Clara",
+          "birthYear": 2003,
+          "city": "Dushanbe",
+          "country": "Tajikistan",
+          "userImage": "clara.jpg"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "2-room apartment downtown",
+      "price": 150,
+      "rooms": 2,
+      "district": "Firdavsi",
+      "images": [
+        "apt2-1.jpg",
+        "apt2-2.jpg"
+      ],
+      "description": "Cozy apartment in the city center, close to shops and cafes. Ideal for 2-3 students.",
+      "coordinates": {
+        "lat": 38.56,
+        "lng": 68.79
+      },
+      "ownerId": 2,
+      "ownerName": "David",
+      "ownerImage": "david.jpg",
+      "contacts": {
+        "phone": "+992902345678",
+        "email": "david@example.com"
+      },
+      "hasDiscount": true,
+      "maxPeople": 3,
+      "users": [
+        {
+          "name": "Eve",
+          "birthYear": 2001,
+          "city": "Dushanbe",
+          "country": "Tajikistan",
+          "userImage": "eve.jpg"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Studio apartment near park",
+      "price": 120,
+      "rooms": 1,
+      "district": "Ismoil Somoni",
+      "images": [
+        "apt3-1.jpg",
+        "apt3-2.jpg"
+      ],
+      "description": "Compact studio with kitchen and bathroom, perfect for a single student or couple of friends.",
+      "coordinates": {
+        "lat": 38.57,
+        "lng": 68.8
+      },
+      "ownerId": 3,
+      "ownerName": "Fiona",
+      "ownerImage": "fiona.jpg",
+      "contacts": {
+        "phone": "+992903456789",
+        "email": "fiona@example.com"
+      },
+      "hasDiscount": false,
+      "maxPeople": 2,
+      "users": []
+    },
+    {
+      "id": 4,
+      "title": "4-room apartment with balcony",
+      "price": 250,
+      "rooms": 4,
+      "district": "Shahrinav",
+      "images": [
+        "apt4-1.jpg",
+        "apt4-2.jpg"
+      ],
+      "description": "Large apartment with 4 bedrooms, living room, kitchen. Great for group of students.",
+      "coordinates": {
+        "lat": 38.58,
+        "lng": 68.81
+      },
+      "ownerId": 4,
+      "ownerName": "George",
+      "ownerImage": "george.jpg",
+      "contacts": {
+        "phone": "+992904567890",
+        "email": "george@example.com"
+      },
+      "hasDiscount": true,
+      "maxPeople": 5,
+      "users": [
+        {
+          "name": "Hannah",
+          "birthYear": 2002,
+          "city": "Dushanbe",
+          "country": "Tajikistan",
+          "userImage": "hannah.jpg"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "1-room apartment near metro",
+      "price": 100,
+      "rooms": 1,
+      "district": "Rudaki",
+      "images": [
+        "apt5-1.jpg",
+        "apt5-2.jpg"
+      ],
+      "description": "Simple 1-room apartment, convenient for students needing affordable living.",
+      "coordinates": {
+        "lat": 38.59,
+        "lng": 68.82
+      },
+      "ownerId": 5,
+      "ownerName": "Isabel",
+      "ownerImage": "isabel.jpg",
+      "contacts": {
+        "phone": "+992905678901",
+        "email": "isabel@example.com"
+      },
+      "hasDiscount": false,
+      "maxPeople": 1,
+      "users": []
+    },
+    {
+      "id": "be5c",
+      "title": "sfsdfsd",
+      "district": "fsdfsd23232",
+      "price": "13123",
+      "rooms": "3",
+      "images": {
+        "0": {}
+      }
+    },
+    {
+      "id": "d2fc",
+      "title": "sfsdfsd",
+      "district": "fsdfsd23232",
+      "price": "13123",
+      "rooms": "3",
+      "images": "data:image/jpeg;base64,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"
+    },
+    {
+      "id": "3089",
+      "title": "sfsdfsd",
+      "district": "fsdfsd23232",
+      "price": "13123",
+      "rooms": "4",
+      "images": ""
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Alice",
+      "age": 21,
+      "university": "TUT",
+      "email": "alice@example.com",
+      "password": "hashed_password",
+      "userImage": "alice.jpg",
+      "city": "Dushanbe",
+      "country": "Tajikistan"
+    },
+    {
+      "id": 2,
+      "name": "David",
+      "age": 23,
+      "university": "TUT",
+      "password": "hashed_password",
+      "userImage": "david.jpg",
+      "city": "Dushanbe",
+      "country": "Tajikistan"
+    },
+    {
+      "id": 3,
+      "name": "Fiona",
+      "age": 22,
+      "university": "TUT",
+      "email": "fiona@example.com",
+      "password": "hashed_password",
+      "userImage": "fiona.jpg",
+      "city": "Dushanbe",
+      "country": "Tajikistan"
+    },
+    {
+      "id": 4,
+      "name": "George",
+      "age": 24,
+      "university": "TUT",
+      "email": "george@example.com",
+      "password": "hashed_password",
+      "userImage": "george.jpg",
+      "city": "Dushanbe",
+      "country": "Tajikistan"
+    },
+    {
+      "id": 5,
+      "name": "Isabel",
+      "age": 21,
+      "university": "TUT",
+      "email": "isabel@example.com",
+      "password": "hashed_password",
+      "userImage": "isabel.jpg",
+      "city": "Dushanbe",
+      "country": "Tajikistan"
+    },
+    {
+      "id": "d82b",
+      "name": "Alijon",
+      "age": 21,
+      "city": "Dushanbe",
+      "password": "Ali2211"
+    }
+  ]
+}
