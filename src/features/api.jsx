@@ -24,6 +24,9 @@ export const api = createApi({
         body: form,
       }),
     }),
+    getApartmentById: builder.query({
+      query: (id) => `apartments?id=${id}`,
+    }),
   }),
 });
 
@@ -32,4 +35,5 @@ export const {
   useGetUsersQuery,
   usePostUserMutation,
   usePostApartmentMutation,
+  useGetApartmentByIdQuery,
 } = api;
