@@ -15,7 +15,7 @@ const Home = () => {
     rooms: "",
   });
 
-  const { data: apartment } = useGetApartmentsQuery();
+  const { data: apartmentss } = useGetApartmentsQuery();
 
   // Mock apartments data
   const apartments = [
@@ -87,7 +87,7 @@ const Home = () => {
   };
 
   // Filter apartments based on filters
-  const filteredApartments = apartments.filter((apartment) => {
+  const filteredApartments = apartmentss?.filter((apartment) => {
     if (
       filters.location &&
       !apartment.district.toLowerCase().includes(filters.location.toLowerCase())
@@ -163,17 +163,17 @@ const Home = () => {
                   : "Featured Apartments"}
               </h2>
               <span className="text-slate-600 font-['Open_Sans']">
-                {filteredApartments.length} apartments found
+                {filteredApartments?.length} apartments found
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredApartments.map((apartment) => (
+              {filteredApartments?.map((apartment) => (
                 <ApartmentCard key={apartment.id} apartment={apartment} />
               ))}
             </div>
 
-            {filteredApartments.length === 0 && (
+            {filteredApartments?.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-slate-600 text-lg font-['Open_Sans']">
                   No apartments match your search criteria. Try adjusting your

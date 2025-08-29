@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { usePostApartmentMutation } from "@/features/api";
 import { useForm } from "react-hook-form";
+import { minLength } from "zod";
 export default function AddApartment() {
   // Load user from localStorage
   const [user, setUser] = useState(null);
@@ -21,13 +22,19 @@ export default function AddApartment() {
   const { register, handleSubmit } = useForm();
 
   async function addNewApartMent(data) {
+    const info = JSON.parse(localStorage.getItem("user"));
+    const allUserInfo = {
+      ...data,
+      ...info,
+    };
     try {
-      await postApartment(data);
-      console.log(data);
+      await postApartment(allUserInfo);
+      console.log(allUserInfo);
     } catch (error) {
       console.error(error);
     }
   }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header user={user} onLogout={handleLogout} />
@@ -105,13 +112,28 @@ export default function AddApartment() {
                       {...register("rooms")}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 outline-none"
                     >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
                     </select>
                   </div>
+                </div>
+
+                {/* Contact  */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Contacts
+                  </label>
+                  <input
+                    type="number"
+                    {...register("contacts")}
+                    minLength={9}
+                    maxLength={9}
+                    placeholder="11-111-11-11"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                  />
                 </div>
 
                 {/* Image */}

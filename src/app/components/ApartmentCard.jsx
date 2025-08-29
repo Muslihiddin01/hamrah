@@ -4,18 +4,40 @@ import { MapPin, Users } from "lucide-react";
 
 const ApartmentCard = ({ apartment }) => {
   return (
-    <Link href={`/ApartmentDetail/${apartment.id}`} className="group" role="button">
+    <Link
+      href={`/ApartmentDetail/${apartment.id}`}
+      className="group"
+      role="button"
+    >
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
         <div className="relative overflow-hidden">
-          <img
-            src={apartment.image}
-            alt={`Apartment in ${apartment.district}`}
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-            decoding="async"
-            width="400"
-            height="192"
-          />
+          {apartment.images && apartment.images.lenght > 0 ? (
+            apartment.images.map((image, i) => {
+              return (
+                <img
+                  key={i}
+                  src={image || "/no picture.webp"}
+                  alt={`Apartment in ${apartment.district}`}
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="192"
+                />
+              );
+            })
+          ) : (
+            <img
+              key={Date.now().toString()}
+              src={apartment.images || "/no picture.webp"}
+              loading="lazy"
+              decoding="async"
+              width="100"
+              height="192"
+              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+              alt={`Apartment in ${apartment.district}`}
+            />
+          )}
           <div className="absolute top-3 right-3 bg-emerald-600 text-white px-2 py-1 rounded-lg text-sm font-semibold">
             €{apartment.price}/month
           </div>

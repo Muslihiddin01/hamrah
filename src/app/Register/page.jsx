@@ -16,6 +16,11 @@ const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   age: z.number().min(18, "You must be at least 18 years old").max(100),
   city: z.string().min(1, "Select your city"),
+  avatar: z
+    .string()
+    .url("Avatar must be a valid URL")
+    .or(z.literal("").transform(() => undefined))
+    .optional(),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
@@ -33,8 +38,14 @@ export default function Register() {
   });
 
   const onSubmit = async (data) => {
+    if (!data.avatar) data.avatar = "";
+    const fullUser = {
+      ...data,
+      apartments: [],
+      favorites: [],
+    };
     try {
-      const newUser = await postUser(data).unwrap();
+      const newUser = await postUser(fullUser).unwrap();
       localStorage.setItem("user", JSON.stringify(newUser));
       toast.success("Registration successful! 🎉");
       router.push("/");
@@ -149,6 +160,22 @@ export default function Register() {
                     {errors.city.message}
                   </p>
                 )}
+              </div>
+
+              {/* image */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Add Image (oprional)
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    {...register("avatar")}
+                    type="text"
+                    placeholder="https://example.com/image.jpg"
+                    className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
               </div>
 
               {/* Password */}
