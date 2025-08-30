@@ -43,6 +43,7 @@ export default function Register() {
       ...data,
       apartments: [],
       favorites: [],
+      createAt: Date.now().toString(),
     };
     try {
       const newUser = await postUser(fullUser).unwrap();
