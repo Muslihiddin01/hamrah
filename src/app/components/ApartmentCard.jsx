@@ -11,14 +11,14 @@ const ApartmentCard = ({ apartment }) => {
     >
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
         <div className="relative overflow-hidden">
-          {apartment.images && apartment.images.lenght > 0 ? (
-            apartment.images.map((image, i) => {
+          {apartment.images && apartment.images.length > 0 ? (
+            apartment.images.slice(0, 1).map((image, i) => {
               return (
                 <img
-                  key={i}
-                  src={image || "/no picture.webp"}
+                  key={image.id ?? i}
+                  src={image.imageName}
                   alt={`Apartment in ${apartment.district}`}
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                   decoding="async"
                   width="400"
@@ -39,7 +39,7 @@ const ApartmentCard = ({ apartment }) => {
             />
           )}
           <div className="absolute top-3 right-3 bg-emerald-600 text-white px-2 py-1 rounded-lg text-sm font-semibold">
-            €{apartment.price}/month
+            {apartment.price}c.
           </div>
         </div>
 
