@@ -2,11 +2,15 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useGetUserByIdQuery, usePostApartmentMutation } from "@/features/api";
+import {
+  useEditUserByIdMutation,
+  usePostApartmentMutation,
+} from "@/features/api";
 import { useForm } from "react-hook-form";
 
 export default function AddApartment() {
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) setUser(JSON.parse(savedUser));
@@ -18,30 +22,48 @@ export default function AddApartment() {
   };
 
   const [postApartment] = usePostApartmentMutation();
-  const userId = JSON.parse(localStorage.getItem("user")).id ?? null;
+  const [editUser] = useEditUserByIdMutation();
 
-  const { data: userById } = useGetUserByIdQuery(userId, { skip: !userId });
-  const userApartment = Array.isArray(userById)
-    ? userById[0]?.apartments ?? []
-    : userById?.apartments ?? [];
+  // Безопасно берём userId из state
+  const userId = user?.id ?? null;
 
-
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   async function addNewApartMent(data) {
-    const apartmentWithUserId = {
-      userId: userId,
+    if (!userId) {
+      console.error("User not logged in");
+      return;
+    }
+
+    const apartmentId = Date.now().toString();
+
+    const dataWithId = {
       ...data,
-      images: [{ imageName: data.images, id: Date.now().toString() }],
+      id: apartmentId,
+    };
+
+    const apartmentWithUserId = {
+      ...dataWithId,
+      userId: userId,
+      images: [{ imageName: dataWithId.images, id: Date.now().toString() }],
       createAt: Date.now().toString(),
     };
 
+    const updatedUser = {
+      ...user,
+      apartments: [...user.apartments, dataWithId?.id],
+    };
+
     try {
-      await postApartment(apartmentWithUserId);
-      userApartment.push(apartmentWithUserId)
-      console.log(apartmentWithUserId);
+      await postApartment(apartmentWithUserId).unwrap();
+      await editUser({ id: userId, data: updatedUser }).unwrap();
+      console.log("Apartment added:", apartmentWithUserId);
     } catch (error) {
-      console.error(error);
+      console.error("Error adding apartment:", error);
     }
   }
 
@@ -50,44 +72,12 @@ export default function AddApartment() {
       <Header user={user} onLogout={handleLogout} />
 
       <main>
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-emerald-50 to-sky-50 py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 font-['Inter']">
-              Add a New <span className="text-emerald-600">Apartment</span>
-            </h1>
-            <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto font-['Open_Sans']">
-              Fill out the details below to create a new listing. Connect with fellow students and help them find their perfect home.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <div className="flex items-center text-slate-600">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                <span className="font-['Open_Sans']">
-                  Easy listing process
-                </span>
-              </div>
-              <div className="flex items-center text-slate-600">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-emerald-600 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                </svg>
-                <span className="font-['Open_Sans']">Reach thousands of students</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Form Section */}
         <section className="py-12">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-10">
-              <h2 className="text-3xl font-bold text-slate-900 mb-2 font-['Inter']">
+              <h2 className="text-3xl font-bold text-slate-900 mb-6">
                 Apartment Details
               </h2>
-              <p className="text-slate-600 mb-8 font-['Open_Sans']">
-                Provide detailed information about your apartment to attract potential roommates.
-              </p>
 
               <form
                 className="space-y-8"
@@ -95,13 +85,20 @@ export default function AddApartment() {
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">Title</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">
+                      Title
+                    </label>
                     <input
                       type="text"
-                      {...register("title")}
+                      {...register("title", { required: "Title is required" })}
                       className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
                       placeholder="Cozy 2-Bedroom Apartment near Campus"
                     />
+                    {errors.title && (
+                      <p className="text-red-500 text-sm">
+                        {errors.title.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="md:col-span-2">
@@ -109,33 +106,66 @@ export default function AddApartment() {
                       Description
                     </label>
                     <textarea
-                      {...register("description")}
+                      {...register("description", {
+                        required: "Description is required",
+                      })}
                       rows={4}
-                      className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
+                      className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200 font-['Open_Sans'] min-h-[120px] max-h-[240px]"
                       placeholder="Describe your apartment, neighborhood, and what makes it special..."
                     />
+                    {errors.description && (
+                      <p className="text-red-500 text-sm">
+                        {errors.description.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">
                       Max People
                     </label>
-                    <input
-                      type="number"
-                      {...register("maxPeople")}
+                    <select
+                      {...register("maxPeople", {
+                        required: "Please select max people",
+                      })}
                       className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
-                      placeholder="2"
-                    />
+                    >
+                      <option value="">Select number of people</option>
+                      {[1, 2, 3, 4, 5, 6].map((num) => (
+                        <option key={num} value={num}>
+                          {num}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.maxPeople && (
+                      <p className="text-red-500 text-sm">
+                        {errors.maxPeople.message}
+                      </p>
+                    )}
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">Rooms</label>
-                    <input
-                      type="number"
-                      {...register("rooms")}
+                    <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">
+                      Rooms
+                    </label>
+                    <select
+                      {...register("rooms", {
+                        required: "Please select number of rooms",
+                      })}
                       className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
-                      placeholder="2"
-                    />
+                    >
+                      <option value="">Select number of rooms</option>
+                      {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                        <option key={num} value={num}>
+                          {num}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.rooms && (
+                      <p className="text-red-500 text-sm">
+                        {errors.rooms.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -144,20 +174,32 @@ export default function AddApartment() {
                     </label>
                     <input
                       type="number"
-                      {...register("area")}
+                      {...register("area", { required: "Area is required" })}
                       className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
                       placeholder="75"
                     />
+                    {errors.area && (
+                      <p className="text-red-500 text-sm">
+                        {errors.area.message}
+                      </p>
+                    )}
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">Floor</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">
+                      Floor
+                    </label>
                     <input
                       type="number"
-                      {...register("floor")}
+                      {...register("floor", { required: "Floor is required" })}
                       className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
                       placeholder="3"
                     />
+                    {errors.floor && (
+                      <p className="text-red-500 text-sm">
+                        {errors.floor.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="md:col-span-2">
@@ -165,26 +207,83 @@ export default function AddApartment() {
                       Price (somoni)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-500 font-['Open_Sans']">TJS</span>
+                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-500 font-['Open_Sans']">
+                        TJS
+                      </span>
                       <input
                         type="number"
-                        {...register("price")}
+                        {...register("price", {
+                          required: "Price is required",
+                        })}
                         className="w-full border border-gray-300 rounded-xl pl-12 p-4 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
                         placeholder="1500"
                       />
                     </div>
+                    {errors.price && (
+                      <p className="text-red-500 text-sm">
+                        {errors.price.message}
+                      </p>
+                    )}
                   </div>
 
-                  <div className="md:col-span-2">
+                  <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">
-                      Amenities (comma separated)
+                      City
+                    </label>
+                    <select
+                      {...register("city", { required: "City is required" })}
+                      className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
+                    >
+                      <option value="">Select a city</option>
+                      <option value="Dushanbe">Dushanbe</option>
+                      <option value="Kulob">Kulob</option>
+                      <option value="Hisor">Hisor</option>
+                      <option value="Khujand">Khujand</option>
+                      <option value="Vahdat">Vahdat</option>
+                    </select>
+                    {errors.city && (
+                      <p className="text-red-500 text-sm">
+                        {errors.city.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">
+                      District
                     </label>
                     <input
                       type="text"
-                      {...register("amenities")}
-                      placeholder="WiFi, AirConditioner, Parking, WashingMachine"
+                      {...register("district", {
+                        required: "District is required",
+                      })}
                       className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
+                      placeholder="Firdavsi"
                     />
+                    {errors.district && (
+                      <p className="text-red-500 text-sm">
+                        {errors.district.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">
+                      Address
+                    </label>
+                    <input
+                      type="text"
+                      {...register("address", {
+                        required: "Address is required",
+                      })}
+                      className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
+                      placeholder="Rudaki Avenue 12"
+                    />
+                    {errors.address && (
+                      <p className="text-red-500 text-sm">
+                        {errors.address.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="md:col-span-2">
@@ -193,10 +292,15 @@ export default function AddApartment() {
                     </label>
                     <input
                       type="text"
-                      {...register("images")}
+                      {...register("images", { required: "Image is required" })}
                       className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
                       placeholder="Paste image URL or Base64 string"
                     />
+                    {errors.images && (
+                      <p className="text-red-500 text-sm">
+                        {errors.images.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 

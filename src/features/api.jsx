@@ -30,6 +30,20 @@ export const api = createApi({
     getUserById: builder.query({
       query: (id) => `users?id=${id}`,
     }),
+    editUserById: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `users/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
+    editFavorites: builder.mutation({
+      query: ({id, data}) => ({
+        url: `users/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -40,4 +54,6 @@ export const {
   usePostApartmentMutation,
   useGetApartmentByIdQuery,
   useGetUserByIdQuery,
+  useEditUserByIdMutation,
+  useEditFavoritesMutation,
 } = api;

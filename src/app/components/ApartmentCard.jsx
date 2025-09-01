@@ -1,76 +1,84 @@
-import React from "react";
-import Link from "next/link";
+"use client";
+import React, { useMemo, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { MapPin, Users } from "lucide-react";
+import PostTime from "./PostTime";
+import AddFavorite from "./AddFavorite";
 
 const ApartmentCard = ({ apartment }) => {
+  const router = useRouter();
+
+  // ⚡ Берём user один раз и мемоизируем
+  const user = useMemo(() => {
+    if (typeof window === "undefined") return null; // чтобы SSR не падал
+    const stored = localStorage.getItem("user");
+    return stored ? JSON.parse(stored) : null;
+  }, []);
+
+  // ⚡ useCallback для стабильности ссылки
+  const handleCardClick = useCallback(() => {
+    router.push(`/ApartmentDetail/${apartment.id}`);
+  }, [router, apartment.id]);
+
   return (
-    <Link
-      href={`/ApartmentDetail/${apartment.id}`}
-      className="group"
-      role="button"
+    <div
+      className="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer"
+      onClick={handleCardClick}
     >
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
-        <div className="relative overflow-hidden">
-          {apartment.images && apartment.images.length > 0 ? (
-            apartment.images.slice(0, 1).map((image, i) => {
-              return (
-                <img
-                  key={image.id ?? i}
-                  src={image.imageName}
-                  alt={`Apartment in ${apartment.district}`}
-                  className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                  decoding="async"
-                  width="400"
-                  height="192"
-                />
-              );
-            })
-          ) : (
-            <img
-              key={Date.now().toString()}
-              src={apartment.images || "/no picture.webp"}
-              loading="lazy"
-              decoding="async"
-              width="100"
-              height="192"
-              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-              alt={`Apartment in ${apartment.district}`}
-            />
-          )}
-          <div className="absolute top-3 right-3 bg-emerald-600 text-white px-2 py-1 rounded-lg text-sm font-semibold">
-            {apartment.price}c.
-          </div>
+      <div className="relative overflow-hidden">
+        {apartment.images?.length > 0 ? (
+          <img
+            src={apartment.images[0].imageName}
+            alt={`Apartment in ${apartment.district}`}
+            className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <img
+            src="/no picture.webp"
+            alt={`Apartment in ${apartment.district}`}
+            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+        <div className="absolute top-3 right-3 bg-emerald-600 text-white px-2 py-1 rounded-lg text-sm font-semibold">
+          {apartment.price}c.
+        </div>
+      </div>
+
+      <div className="p-6">
+        <div className="flex items-center text-gray-600 mb-2">
+          <MapPin className="h-4 w-4 mr-1" />
+          <span className="text-sm font-['Open_Sans']">
+            {apartment.city} • {apartment.district}
+          </span>
         </div>
 
-        <div className="p-6">
-          <div className="flex items-center text-gray-600 mb-2">
-            <MapPin className="h-4 w-4 mr-1" />
+        <h3 className="text-lg font-semibold text-slate-900 mb-3 font-['Inter'] group-hover:text-emerald-600 transition-colors">
+          {apartment.title}
+        </h3>
+
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center text-gray-600">
+            <Users className="h-4 w-4 mr-1" />
             <span className="text-sm font-['Open_Sans']">
-              {apartment.district}
+              {apartment.rooms} rooms
             </span>
           </div>
 
-          <h3 className="text-lg font-semibold text-slate-900 mb-3 font-['Inter'] group-hover:text-emerald-600 transition-colors">
-            {apartment.title}
-          </h3>
+          <PostTime createAt={apartment.createAt} />
+        </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center text-gray-600">
-              <Users className="h-4 w-4 mr-1" />
-              <span className="text-sm font-['Open_Sans']">
-                {apartment.rooms} rooms
-              </span>
-            </div>
-
-            <div className="text-emerald-600 font-semibold font-['Inter']">
-              View Details
-            </div>
-          </div>
+        <div className="text-emerald-600 font-semibold font-['Inter'] flex items-center justify-between gap-5">
+          <span>View Details</span>
+          {/* ⚡ Передаём и userId, и apartmentId */}
+          <AddFavorite userId={user?.id ?? null} apartmentId={apartment.id} />
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
-export default ApartmentCard;
+export default React.memo(ApartmentCard);

@@ -17,64 +17,6 @@ const Home = () => {
 
   const { data: apartmentss } = useGetApartmentsQuery();
 
-  // Mock apartments data
-  const apartments = [
-    {
-      id: 1,
-      title: "Modern Shared Apartment",
-      district: "Mitte, Berlin",
-      price: 650,
-      rooms: 3,
-      image:
-        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop&crop=center",
-    },
-    {
-      id: 2,
-      title: "Cozy Student Flat",
-      district: "Kreuzberg, Berlin",
-      price: 550,
-      rooms: 2,
-      image:
-        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop&crop=center",
-    },
-    {
-      id: 3,
-      title: "Bright City Apartment",
-      district: "Prenzlauer Berg, Berlin",
-      price: 750,
-      rooms: 4,
-      image:
-        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop&crop=center",
-    },
-    {
-      id: 4,
-      title: "Spacious Shared Living",
-      district: "Friedrichshain, Berlin",
-      price: 600,
-      rooms: 3,
-      image:
-        "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400&h=300&fit=crop&crop=center",
-    },
-    {
-      id: 5,
-      title: "Student-Friendly Flat",
-      district: "Charlottenburg, Berlin",
-      price: 700,
-      rooms: 2,
-      image:
-        "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400&h=300&fit=crop&crop=center",
-    },
-    {
-      id: 6,
-      title: "Contemporary Living Space",
-      district: "Neukölln, Berlin",
-      price: 580,
-      rooms: 3,
-      image:
-        "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop&crop=center",
-    },
-  ];
-
   // Load user from localStorage
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -95,7 +37,7 @@ const Home = () => {
       return false;
     if (filters.maxPrice && apartment.price > Number(filters.maxPrice))
       return false;
-    if (filters.rooms && apartment.rooms !== Number(filters.rooms))
+    if (filters.rooms && apartment.rooms !== filters.rooms)
       return false;
     return true;
   });
@@ -167,7 +109,7 @@ const Home = () => {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
               {filteredApartments?.map((apartment) => (
                 <ApartmentCard key={apartment.id} apartment={apartment} />
               ))}
