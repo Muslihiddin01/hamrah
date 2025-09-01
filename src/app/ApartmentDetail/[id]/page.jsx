@@ -7,13 +7,20 @@ import Footer from "../../components/Footer";
 import { MapPin, ArrowLeft } from "lucide-react";
 import { useGetApartmentByIdQuery, useGetUserByIdQuery } from "@/features/api";
 import Image from "next/image";
+import AddFavorite from "@/app/components/AddFavorite";
 
 export default function ApartmentDetail() {
   const { id } = useParams();
   const router = useRouter();
   const [user, setUser] = useState(null);
+
   const { data: apartmentById } = useGetApartmentByIdQuery(id, { skip: !id });
-  const { data: userById } = useGetUserByIdQuery(id, { skip: !id });
+  const apartment = Array.isArray(apartmentById)
+    ? apartmentById[0]
+    : apartmentById;
+  const { data: userById } = useGetUserByIdQuery(apartment?.userId, {
+    skip: !apartment?.userId,
+  });
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -24,10 +31,6 @@ export default function ApartmentDetail() {
     localStorage.removeItem("user");
     setUser(null);
   };
-
-  const apartment = Array.isArray(apartmentById)
-    ? apartmentById[0]
-    : apartmentById;
 
   const userProfile = Array.isArray(userById) ? userById[0] : userById;
 
@@ -79,14 +82,19 @@ export default function ApartmentDetail() {
             <h1 className="text-4xl font-bold text-slate-900 mb-2">
               {apartment?.title}
             </h1>
-            <p className="text-gray-600 mb-4 flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-emerald-600" />
-              {apartment?.district}
-            </p>
+            <div className="flex items-baseline justify-between mt-5 mb-1">
+              <p className="text-gray-600 mb-4 flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-emerald-600" />
+                {apartment?.district}
+              </p>
+              <AddFavorite userId={user?.id} apartmentId={id} />
+            </div>
 
             {/* Main Image */}
             <div className="w-full mb-4 md:h-[600px] flex items-center justify-center bg-gray-200 rounded-lg">
               <img
+                width={500}
+                height={250}
                 src={apartment?.images?.[0]?.imageName || "/no picture.webp"}
                 alt={apartment?.title}
                 className="w-fit h-full shadow-md max-w-full"
@@ -102,6 +110,8 @@ export default function ApartmentDetail() {
                   .slice(0, 8)
                   .map((image, i) => (
                     <img
+                      width={500}
+                      height={250}
                       key={i}
                       src={image.imageName || "/no picture.webp"}
                       alt={`Apartment in ${apartment.district}`}
@@ -112,6 +122,8 @@ export default function ApartmentDetail() {
                   ))
               ) : (
                 <img
+                  width={500}
+                  height={250}
                   src="/no picture.webp"
                   loading="lazy"
                   decoding="async"
@@ -180,19 +192,22 @@ export default function ApartmentDetail() {
               <button className="w-full bg-blue-600 text-white font-bold py-4 text-lg rounded-lg flex items-center justify-center mb-2 hover:bg-blue-700 transition-colors">
                 <span>
                   +992{" "}
-                  {`${userProfile?.contacts.slice(
+                  {`${userProfile?.contacts?.slice(
                     0,
                     2
-                  )}-${userProfile?.contacts.slice(
+                  )}-${userProfile?.contacts?.slice(
                     2,
                     5
-                  )}-${userProfile?.contacts.slice(
+                  )}-${userProfile?.contacts?.slice(
                     5,
                     7
-                  )}-${userProfile?.contacts.slice(7, 9)}`}
+                  )}-${userProfile?.contacts?.slice(7, 9)}`}
                 </span>
               </button>
-              <button className="w-full bg-green-500 text-white font-bold py-4 text-lg rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors">
+              <button
+                onClick={() => router.push(`/Chat/${apartment?.userId}`)}
+                className="w-full bg-green-500 text-white font-bold py-4 text-lg rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -209,25 +224,25 @@ export default function ApartmentDetail() {
 
             <div className="bg-white p-6 rounded-xl shadow-md">
               <div className="mb-3 flex items-center gap-3">
-                {userProfile.avatar && (
+                {userProfile?.avatar && (
                   <Image
-                    src={userProfile.avatar}
+                    src={userProfile?.avatar}
                     width={50}
                     height={50}
                     alt="userImage"
                     className="rounded-full hover:opacity-90"
                   />
                 )}
-                <span className="text-xl">{userProfile.name}</span>
+                <span className="text-xl">{userProfile?.name}</span>
               </div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-gray-500">
-                  {formatCreateAt(userProfile.createAt)}
+                  {formatCreateAt(userProfile?.createAt)}
                 </span>
               </div>
 
               <button
-                onClick={() => router.push(`/userPosts/${id}`)}
+                onClick={() => router.push(`/userPosts/${apartment?.userId}`)}
                 className="text-blue-600 hover:underline cursor-pointer hover:text-blue-800"
               >
                 Другие объявления автора

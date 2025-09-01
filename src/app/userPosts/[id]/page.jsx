@@ -56,9 +56,7 @@ const UserPosts = () => {
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
             >
               {apartment?.images &&
-                apartment?.images
-                  .slice(0, 1)
-                  .map((image) => (
+                apartment?.images.slice(0, 1).map((image) => (
                     <Image
                       key={image.id}
                       src={image.imageName}
