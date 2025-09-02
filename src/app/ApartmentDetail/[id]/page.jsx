@@ -205,7 +205,11 @@ export default function ApartmentDetail() {
                 </span>
               </button>
               <button
-                onClick={() => router.push(`/Chat/${apartment?.userId}`)}
+                onClick={() =>
+                  router.push(
+                    `/Chat/${apartment?.id}?userId=${apartment?.userId}`
+                  )
+                }
                 className="w-full bg-green-500 text-white font-bold py-4 text-lg rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors"
               >
                 <svg

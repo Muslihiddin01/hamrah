@@ -2,11 +2,18 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Send, User } from "lucide-react";
+import {
+  useGetChatsByApartmentAndUserQuery,
+  usePostMessageByIdMutation,
+} from "@/features/api";
 
 const Chat = () => {
   const { id } = useParams();
+  const searchParams = useSearchParams();
+  const ownerId = searchParams.get("userId");
+
   const [user, setUser] = useState(null);
   const router = useRouter();
   useEffect(() => {
@@ -19,14 +26,44 @@ const Chat = () => {
     setUser(null);
   };
 
+  const { data: getChatsByApartmentAndUser, refetch: chatsRefetch } =
+    useGetChatsByApartmentAndUserQuery(
+      { userId: ownerId, apartmentId: id },
+      { skip: !ownerId && !id }
+    );
+
+  const chats = Array.isArray(getChatsByApartmentAndUser)
+    ? getChatsByApartmentAndUser[0]
+    : getChatsByApartmentAndUser;
+
+  const [editAndPostMessage] = usePostMessageByIdMutation();
+
   const [message, setMessage] = useState("");
 
-  console.log(user?.id,id);
-  
+  async function addMessage(e) {
+    e.preventDefault();
+    const data = {
+      ...chats,
+      chat: [
+        ...chats.chat,
+        { id: Date.now().toString(), message: message, senderId: user?.id },
+      ],
+    };
+    try {
+      await editAndPostMessage({
+        userId: ownerId,
+        apartmentId: id,
+        data: data,
+      });
+      setMessage("");
+      chatsRefetch();
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   if (!user) return null;
 
-  if (user.id === id) return null;
   return (
     <div className="min-h-screen bg-gray-50">
       <Header user={user} onLogout={handleLogout} />
@@ -75,7 +112,7 @@ const Chat = () => {
               </div>
 
               {/* Chat Messages */}
-              <div className="lg:col-span-2 flex flex-col justify-between bg-gray-50">
+              <div className="lg:col-span-2 flex flex-col justify-between bg-gray-50 ">
                 <div className="flex-1 flex flex-col items-center justify-center text-center">
                   <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-600 font-['Open_Sans']">
@@ -86,8 +123,28 @@ const Chat = () => {
                   </div>
                 </div>
 
+                <main className="w-full border p-5 flex flex-col">
+                  {chats?.chat?.map((message, i) => {
+                    return (
+                      <article
+                        key={message?.id ?? i}
+                        className={`${
+                          message?.senderId === user?.id
+                            ? "self-end bg-emerald-600 text-white"
+                            : "self-start bg-gray-300"
+                        } py-2.5 px-5 rounded-full`}
+                      >
+                        {message?.message}
+                      </article>
+                    );
+                  })}
+                </main>
+
                 {/* Message Input */}
-                <div className="p-4 border-t border-gray-300 bg-white flex items-center space-x-2">
+                <form
+                  onSubmit={addMessage}
+                  className="p-4 border-t border-gray-300 bg-white flex items-center space-x-2"
+                >
                   <input
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
@@ -96,13 +153,14 @@ const Chat = () => {
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-emerald-500 focus:border-emerald-500 transition-colors font-['Open_Sans'] outline-none"
                   />
                   <button
+                    type="submit"
                     className={` text-white p-2 rounded-lg hover:bg-emerald-700 ${
                       message ? "bg-emerald-600" : "bg-emerald-900"
                     } transition-colors`}
                   >
                     <Send className="h-4 w-4" />
                   </button>
-                </div>
+                </form>
               </div>
             </div>
           </div>
