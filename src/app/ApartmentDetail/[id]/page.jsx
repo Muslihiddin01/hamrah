@@ -92,12 +92,12 @@ export default function ApartmentDetail() {
 
             {/* Main Image */}
             <div className="w-full mb-4 md:h-[600px] flex items-center justify-center bg-gray-200 rounded-lg">
-              <img
+              <Image
                 width={500}
                 height={250}
                 src={apartment?.images?.[0]?.imageName || "/no picture.webp"}
                 alt={apartment?.title}
-                className="w-fit h-full shadow-md max-w-full"
+                className="w-fit h-full shadow-md max-w-full object-contain"
                 loading="lazy"
                 decoding="async"
               />
@@ -109,13 +109,13 @@ export default function ApartmentDetail() {
                 apartment.images
                   .slice(0, 8)
                   .map((image, i) => (
-                    <img
+                    <Image
                       width={500}
                       height={250}
                       key={i}
                       src={image.imageName || "/no picture.webp"}
                       alt={`Apartment in ${apartment.district}`}
-                      className="w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300 rounded"
+                      className="w-full h-24 object-contain group-hover:scale-105 transition-transform duration-300 rounded"
                       loading="lazy"
                       decoding="async"
                     />
@@ -127,7 +127,7 @@ export default function ApartmentDetail() {
                   src="/no picture.webp"
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-24 object-cover rounded"
+                  className="w-full h-24 object-contain rounded"
                   alt="No picture"
                 />
               )}

@@ -43,6 +43,7 @@ export default function Register() {
       ...data,
       apartments: [],
       favorites: [],
+      friends: [],
       createAt: Date.now().toString(),
     };
     try {

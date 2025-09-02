@@ -49,10 +49,24 @@ export const api = createApi({
         `chats?userId=${userId}&apartmentId=${apartmentId}`,
     }),
     postMessageById: builder.mutation({
-      query: ({ userId, apartmentId, data }) => ({
-        url: `chats?userId=${userId}&apartmentId=${apartmentId}`,
+      query: ({ chatId, data }) => ({
+        url: `chats/${chatId}`,
         method: "PUT",
         body: data,
+      }),
+    }),
+    createChat: builder.mutation({
+      query: (newChat) => ({
+        url: "chats",
+        method: "POST",
+        body: newChat,
+      }),
+    }),
+    addToFriend: builder.mutation({
+      query: ({id, friendId}) => ({
+        url: `users/${id}`,
+        method: "PUT",
+        body: friendId,
       }),
     }),
   }),
@@ -69,4 +83,6 @@ export const {
   useEditFavoritesMutation,
   useGetChatsByApartmentAndUserQuery,
   usePostMessageByIdMutation,
+  useCreateChatMutation,
+  useAddToFriendMutation,
 } = api;

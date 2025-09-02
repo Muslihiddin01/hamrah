@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Menu, X, Home, MessageCircle } from "lucide-react";
+import { Menu, X, Home, MessageCircle, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const Header = ({ user, onLogout }) => {
@@ -36,11 +36,11 @@ const Header = ({ user, onLogout }) => {
             {user ? (
               <>
                 <Link
-                  href="/Chat"
+                  href="/users"
                   className="text-slate-700 hover:text-emerald-600 transition-colors font-medium flex items-center space-x-1"
                 >
-                  <MessageCircle className="h-4 w-4" />
-                  <span>Messages</span>
+                  <User className="h-4 w-4" />
+                  <span>Users</span>
                 </Link>
                 <div className="flex items-center space-x-4">
                   <span className="text-slate-700 font-medium">
