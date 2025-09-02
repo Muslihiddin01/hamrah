@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { MapPin, Users } from "lucide-react";
 import PostTime from "./PostTime";
 import AddFavorite from "./AddFavorite";
+import Image from "next/image";
 
 const ApartmentCard = ({ apartment }) => {
   const router = useRouter();
@@ -27,18 +28,22 @@ const ApartmentCard = ({ apartment }) => {
     >
       <div className="relative overflow-hidden">
         {apartment.images?.length > 0 ? (
-          <img
+          <Image
+            width={100}
+            height={100}
             src={apartment.images[0].imageName}
             alt={`Apartment in ${apartment.district}`}
-            className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-72 object-contain group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
             decoding="async"
           />
         ) : (
-          <img
+          <Image
+            width={100}
+            height={100}
             src="/no picture.webp"
             alt={`Apartment in ${apartment.district}`}
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
             decoding="async"
           />
