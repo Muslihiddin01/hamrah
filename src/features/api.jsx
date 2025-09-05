@@ -72,6 +72,9 @@ export const api = createApi({
     getUserByIds: builder.query({
       query: (ids) => `/users?${ids.map((id) => `id=${id}`).join("&")}`,
     }),
+    getUsersBySearch: builder.query({
+      query: (search) => `users?name=${search}`,
+    }),
   }),
 });
 
@@ -89,4 +92,5 @@ export const {
   useCreateChatMutation,
   useAddToFriendMutation,
   useGetUserByIdsQuery,
+  useGetUsersBySearchQuery,
 } = api;
