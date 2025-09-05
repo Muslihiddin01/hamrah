@@ -63,11 +63,14 @@ export const api = createApi({
       }),
     }),
     addToFriend: builder.mutation({
-      query: ({id, friendId}) => ({
+      query: ({ id, friendId }) => ({
         url: `users/${id}`,
         method: "PUT",
         body: friendId,
       }),
+    }),
+    getUserByIds: builder.query({
+      query: (ids) => `/users?${ids.map((id) => `id=${id}`).join("&")}`,
     }),
   }),
 });
@@ -85,4 +88,5 @@ export const {
   usePostMessageByIdMutation,
   useCreateChatMutation,
   useAddToFriendMutation,
+  useGetUserByIdsQuery,
 } = api;

@@ -46,12 +46,20 @@ const Header = ({ user, onLogout }) => {
                   <span className="text-slate-700 font-medium">
                     Hi, {user.name}
                   </span>
-                  <button
-                    onClick={() => router.push("/addApartment")}
-                    className=" px-4 py-2 rounded-lg font-medium text-slate-700 hover:text-emerald-600 transition-colors cursor-pointer flex items-center space-x-1"
+                  <select
+                    onChange={(e) => {
+                      if (e.target.value === "add") {
+                        router.push("/addApartment");
+                      } else if (e.target.value === "friends") {
+                        router.push("/viewFriends");
+                      }
+                    }}
+                    className="px-4 py-2 rounded-lg font-medium text-slate-700 hover:text-emerald-600 transition-colors cursor-pointer flex items-center space-x-1"
                   >
-                    Add apartment
-                  </button>
+                    <option value="">Choose option</option>
+                    <option value="add">Add apartment</option>
+                    <option value="friends">Friends</option>
+                  </select>
                   <button
                     onClick={handleLogout}
                     className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors font-medium"

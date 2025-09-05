@@ -1,7 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Send, User } from "lucide-react";
 import {
@@ -39,6 +37,7 @@ const Chat = () => {
     const timer = setTimeout(() => {
       async function checkOrCreateChat() {
         if (
+          user?.id != ownerId &&
           getChatsByApartmentAndUser &&
           getChatsByApartmentAndUser.length > 0
         ) {
@@ -111,7 +110,7 @@ const Chat = () => {
     return `${days} дней назад`;
   };
 
-  if (!user || user?.id == ownerId) return null;
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
