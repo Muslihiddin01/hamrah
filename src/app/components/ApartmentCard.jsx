@@ -33,7 +33,7 @@ const ApartmentCard = ({ apartment }) => {
             height={100}
             src={apartment.images[0].imageName}
             alt={`Apartment in ${apartment.district}`}
-            className="w-full h-72 object-contain group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
             decoding="async"
           />
@@ -43,7 +43,7 @@ const ApartmentCard = ({ apartment }) => {
             height={100}
             src="/no picture.webp"
             alt={`Apartment in ${apartment.district}`}
-            className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
             decoding="async"
           />

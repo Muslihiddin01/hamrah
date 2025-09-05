@@ -2,6 +2,7 @@
 import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
 import { useGetUserByIdQuery } from "@/features/api";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -30,7 +31,14 @@ const UserPosts = () => {
     <div>
       <Header user={user} onLogout={handleLogout} />
 
-      <section className="min-h-screen max-w-6xl mx-auto px-4 py-8">
+      <section className="min-h-screen max-w-7xl mx-auto px-4 py-8">
+        <button
+          onClick={() => router.push("/")}
+          className="flex items-center text-slate-600 hover:text-emerald-600 transition-colors mb-6"
+        >
+          <ArrowLeft className="h-5 w-5 mr-2" />
+          Назад к поиску
+        </button>
         <div className="flex items-center gap-4 mb-6">
           <img
             src={usersApartments?.avatar || "/default-avatar.png"}
@@ -56,7 +64,9 @@ const UserPosts = () => {
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
             >
               {apartment?.images &&
-                apartment?.images.slice(0, 1).map((image) => (
+                apartment?.images
+                  .slice(0, 1)
+                  .map((image) => (
                     <Image
                       key={image.id}
                       src={image.imageName}

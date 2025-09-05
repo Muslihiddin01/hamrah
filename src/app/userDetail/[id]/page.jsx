@@ -60,7 +60,7 @@ const UserDetail = () => {
         onLogout={() => localStorage.removeItem("user")}
       />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Back Button */}
         <button
           onClick={() => router.back()}
@@ -78,9 +78,9 @@ const UserDetail = () => {
               <Image
                 width={100}
                 height={100}
-                src={userDetail?.avatar ?? "image"}
+                src={userDetail?.avatar ?? "/no picture.webp"}
                 alt={userDetail?.name ?? "image"}
-                className="rounded-full object-contain w-40 h-40 border-4 border-black shadow"
+                className="rounded-full object-cover w-40 h-40 border-4 border-emerald-600 shadow"
               />
             </div>
 
