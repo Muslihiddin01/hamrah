@@ -15,6 +15,7 @@ const Button = ({ children, variant = "primary", size = "md", ...props }) => {
     case "lg":
       sizeClasses = "px-5 py-3 text-lg";
       break;
+      case "full" : sizeClasses = "py-3 px-5 w-full"
   }
 
   let variantClasses = "";

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Menu, X, Home, MessageCircle, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-
+import Select from "../components/Select"
 const Header = ({ user, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
@@ -46,20 +46,7 @@ const Header = ({ user, onLogout }) => {
                   <span className="text-slate-700 font-medium">
                     Hi, {user.name}
                   </span>
-                  <select
-                    onChange={(e) => {
-                      if (e.target.value === "add") {
-                        router.push("/addApartment");
-                      } else if (e.target.value === "friends") {
-                        router.push("/viewFriends");
-                      }
-                    }}
-                    className="px-4 py-2 rounded-lg font-medium text-slate-700 hover:text-emerald-600 transition-colors cursor-pointer flex items-center space-x-1"
-                  >
-                    <option value="">Choose option</option>
-                    <option value="add">Add apartment</option>
-                    <option value="friends">Friends</option>
-                  </select>
+                  <Select/>
                   <button
                     onClick={handleLogout}
                     className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors font-medium"

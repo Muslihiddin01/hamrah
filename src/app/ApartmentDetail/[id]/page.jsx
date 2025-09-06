@@ -67,9 +67,9 @@ export default function ApartmentDetail() {
     <div className="min-h-screen bg-gray-50">
       <Header user={user} onLogout={handleLogout} />
 
-      <main className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <button
-          onClick={() => router.push("/")}
+          onClick={() => router.back()}
           className="flex items-center text-slate-600 hover:text-emerald-600 transition-colors mb-6"
         >
           <ArrowLeft className="h-5 w-5 mr-2" />
@@ -87,7 +87,9 @@ export default function ApartmentDetail() {
                 <MapPin className="h-5 w-5 text-emerald-600" />
                 {apartment?.district}
               </p>
-              <AddFavorite userId={user?.id} apartmentId={id} />
+              <div className="bg-white rounded-full p-2 shadow">
+                <AddFavorite userId={user?.id} apartmentId={apartment.id} />
+              </div>
             </div>
 
             {/* Main Image */}

@@ -1,14 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "react-toastify";
-import { User, Lock, Calendar, Eye, EyeOff } from "lucide-react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { User, Lock, Calendar, Eye, EyeOff, Phone } from "lucide-react";
 import { usePostUserMutation } from "@/features/api";
 
 // схема валидации
@@ -56,180 +54,234 @@ export default function Register() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+  useEffect(() => {
+    // Запрещаем скролл при монтировании
+    document.body.style.overflowY = "hidden";
+    return () => {
+      // Возвращаем скролл при размонтировании
+      document.body.style.overflowY = "auto";
+    };
+  }, []);
 
-      <main className="py-12">
-        <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-            <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold text-slate-900">
-                Join StudentFlats
-              </h1>
-              <p className="text-slate-600 mt-2">
-                Create your account to start finding roommates
-              </p>
+ return (
+  <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 content-center">
+    <main className="flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full md:max-w-[40%]">
+        <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Join StudentFlats
+            </h1>
+            <p className="text-gray-600 text-sm">
+              Create your account to start finding roommates
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 grid grid-cols-2 gap-x-7 gap-y-2">
+            {/* Full Name */}
+            <div className="col-span-2">
+              <label className="block text-sm font-semibold text-gray-800 mb-2">
+                Full Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-500" />
+                </div>
+                <input
+                  {...register("name", { required: "Full name is required" })}
+                  type="text"
+                  placeholder="Muhammad"
+                  autoFocus
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 outline-none ${
+                    errors.name
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300"
+                  }`}
+                />
+              </div>
+              {errors.name && (
+                <p className="mt-1 text-sm text-red-600 font-medium">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
 
-            {/* форма */}
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Name */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    {...register("name")}
-                    type="text"
-                    placeholder="Muhammad"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 ${
-                      errors.name ? "border-red-300" : "border-gray-300"
-                    }`}
-                  />
+            {/* Age */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-800 mb-2">
+                Age
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Calendar className="h-5 w-5 text-gray-500" />
                 </div>
-                {errors.name && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.name.message}
-                  </p>
-                )}
+                <input
+                  {...register("age", {
+                    required: "Age is required",
+                    min: { value: 17, message: "Minimum age is 17" },
+                    max: { value: 99, message: "Maximum age is 99" },
+                    valueAsNumber: true,
+                  })}
+                  type="number"
+                  placeholder="22"
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 outline-none ${
+                    errors.age
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300"
+                  }`}
+                />
               </div>
+              {errors.age && (
+                <p className="mt-1 text-sm text-red-600 font-medium">
+                  {errors.age.message}
+                </p>
+              )}
+            </div>
 
-              {/* Age */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Age
-                </label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    {...register("age", {
-                      valueAsNumber: true,
-                      min: 17,
-                      max: 99,
-                    })}
-                    type="number"
-                    placeholder="22"
-                    min={17}
-                    max={99}
-                    onKeyDown={(e) => {
-                      if (["-", "+", "e", "E"].includes(e.key))
-                        e.preventDefault();
-                    }}
-                    onInput={(e) => {
-                      const target = e.target;
-                      if (target.value > 99)
-                        target.value = 99 && alert("Max is 99, sorry");
-                      else if (target.value < 1) target.value = "";
-                    }}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 ${
-                      errors.age ? "border-red-300" : "border-gray-300"
-                    }`}
-                  />
-                </div>
-                {errors.age && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.age.message}
-                  </p>
-                )}
-              </div>
-
-              {/* // city  */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Select your city
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <select
-                    {...register("city")}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 ${
-                      errors.city ? "border-red-300" : "border-gray-300"
-                    }`}
-                  >
-                    <option value="Dushanbe">Dushanbe</option>
-                    <option value="Kulob">Kulob</option>
-                    <option value="Khujand">Khujand</option>
-                    <option value="Vahdat">Vahdat</option>
-                    <option value="Kurgantupe">Kurgantupe</option>
-                    <option value="Hisor">Hisor</option>
-                  </select>
-                </div>
-                {errors.city && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.city.message}
-                  </p>
-                )}
-              </div>
-
-              {/* image */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Add Image (oprional)
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    {...register("avatar")}
-                    type="text"
-                    placeholder="https://example.com/image.jpg"
-                    className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500"
-                  />
-                </div>
-              </div>
-
-              {/* Password */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    {...register("password")}
-                    type={showPassword ? "text" : "password"}
-                    minLength={4}
-                    maxLength={10}
-                    placeholder="Maga2211"
-                    className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 ${
-                      errors.password ? "border-red-300" : "border-gray-300"
-                    }`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50"
+            {/* City */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-800 mb-2">
+                Select Your City
+              </label>
+              <select
+                {...register("city", { required: "City is required" })}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 outline-none ${
+                  errors.city
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300"
+                }`}
               >
-                {isSubmitting ? "Creating Account..." : "Create Account"}
-              </button>
-            </form>
+                <option value="">Select city</option>
+                <option value="Dushanbe">Dushanbe</option>
+                <option value="Kulob">Kulob</option>
+                <option value="Khujand">Khujand</option>
+                <option value="Vahdat">Vahdat</option>
+                <option value="Kurgantupe">Kurgantupe</option>
+                <option value="Hisor">Hisor</option>
+              </select>
+              {errors.city && (
+                <p className="mt-1 text-sm text-red-600 font-medium">
+                  {errors.city.message}
+                </p>
+              )}
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-800 mb-2">
+                Phone Number
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Phone className="h-5 w-5 text-gray-500" />
+                </div>
+                <input
+                  {...register("phone", {
+                    required: "Phone number is required",
+                    pattern: {
+                      value: /^[0-9]{9,15}$/,
+                      message: "Enter a valid phone number",
+                    },
+                  })}
+                  type="tel"
+                  placeholder="+992901234567"
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 outline-none ${
+                    errors.phone
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300"
+                  }`}
+                />
+              </div>
+              {errors.phone && (
+                <p className="mt-1 text-sm text-red-600 font-medium">
+                  {errors.phone.message}
+                </p>
+              )}
+            </div>
+
+            {/* Avatar */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-800 mb-2">
+                Add Image (optional)
+              </label>
+              <input
+                {...register("avatar")}
+                type="text"
+                placeholder="https://example.com/image.jpg"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 outline-none"
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-800 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-500" />
+                </div>
+                <input
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: { value: 4, message: "Min 4 characters" },
+                    maxLength: { value: 10, message: "Max 10 characters" },
+                  })}
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Maga2211"
+                  className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 outline-none ${
+                    errors.password
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300"
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 transition-colors outline-none"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600 font-medium">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg self-center col-span-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? "Creating Account..." : "Create Account"}
+            </button>
+          </form>
+
+          <div className="mt-6 flex justify-center items-center gap-4 text-sm text-gray-600">
+            <button
+              onClick={() => router.push("/")}
+              className="font-medium text-emerald-600 hover:text-emerald-800 transition-colors outline-none"
+            >
+              Go Home
+            </button>
+            <span className="text-gray-400">/</span>
+            <button
+              onClick={() => router.push("/Login")}
+              className="font-medium text-emerald-600 hover:text-emerald-800 transition-colors outline-none"
+            >
+              Login
+            </button>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </div>
-  );
+      </div>
+    </main>
+  </div>
+);
 }

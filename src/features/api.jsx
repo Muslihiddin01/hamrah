@@ -75,10 +75,12 @@ export const api = createApi({
     getUsersBySearch: builder.query({
       query: (search) => `users?name=${search}`,
     }),
+    getApartmentByIds: builder.query({
+      query: (ids) => `apartments?${ids.map((id) => `id=${id}`).join("&")}`,
+    }),
     getUsersChat: builder.query({
       query: () => "privateChats",
       transformResponse: (response, meta, arg) => {
-        // ищем чат, где есть оба пользователя
         return response.filter(
           (chat) =>
             chat.participants.includes(arg.userId1) &&
@@ -117,6 +119,7 @@ export const {
   useCreateChatMutation,
   useAddToFriendMutation,
   useGetUserByIdsQuery,
+  useGetApartmentByIdsQuery,
   useGetUsersBySearchQuery,
   useGetUsersChatQuery,
   usePostMessageByUsersMutation,

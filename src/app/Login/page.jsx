@@ -6,9 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "react-toastify";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
+import { Lock, Eye, EyeOff, User } from "lucide-react";
 import { useGetUsersQuery } from "@/features/api";
 
 const loginSchema = z.object({
@@ -49,11 +47,9 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-
-      <main className="py-12">
-        <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
+    <div className=" bg-gray-50">
+      <main className="py-12 min-h-screen content-center">
+        <div className="md:max-w-[40%] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
             <div className="text-center mb-8">
               <h1 className="text-2xl font-bold text-slate-900 font-['Inter']">
@@ -77,9 +73,10 @@ const Login = () => {
                   <input
                     {...register("name")}
                     id="name"
+                    autoFocus
                     type="text"
                     placeholder="Muhammad"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors font-['Open_Sans'] ${
+                    className={`w-full pl-10 pr-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors font-['Open_Sans'] ${
                       errors.name ? "border-red-300" : "border-gray-300"
                     }`}
                   />
@@ -105,7 +102,7 @@ const Login = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
-                    className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors font-['Open_Sans'] ${
+                    className={`w-full pl-10 pr-12 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors font-['Open_Sans'] ${
                       errors.password ? "border-red-300" : "border-gray-300"
                     }`}
                   />
@@ -144,7 +141,7 @@ const Login = () => {
               <p className="text-slate-600 font-['Open_Sans']">
                 Don't have an account?{" "}
                 <Link
-                  href="/register"
+                  href="/Register"
                   className="text-emerald-600 hover:text-emerald-700 font-medium"
                 >
                   Sign up here
@@ -154,8 +151,6 @@ const Login = () => {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
