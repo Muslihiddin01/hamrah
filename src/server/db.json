@@ -146,109 +146,43 @@
   ],
   "chats": [
     {
-      "id": "0",
+      "id": "1757150185389",
+      "userId": "0",
+      "apartmentId": "1756572964789",
+      "chat": []
+    },
+    {
+      "id": "1757150206451",
       "userId": "0",
       "apartmentId": "0",
       "chat": [
         {
-          "id": "0",
-          "senderId": "8274",
-          "message": "salom"
-        },
-        {
-          "id": "1",
-          "senderId": "0",
-          "message": "vaaleikum"
-        },
-        {
-          "id": "1756802770536",
-          "message": "Sozi?",
+          "id": "1757150214073",
+          "message": "Uevv iff",
           "senderId": "8274"
-        },
-        {
-          "id": "1756802815822",
-          "message": "Nashinokhtima?",
-          "senderId": "8274"
-        },
-        {
-          "id": "1756812011751",
-          "message": "Salom",
-          "senderId": "0"
         }
       ]
-    },
+    }
+  ],
+  "privateChats": [
     {
-      "id": "1756820417931",
-      "userId": "0",
-      "apartmentId": "1756572964789",
+      "id": "1757155422221",
+      "participants": [
+        "0",
+        "8274"
+      ],
       "chat": [
         {
-          "id": "1756821086547",
-          "message": "salom",
-          "senderId": "8274"
-        },
-        {
-          "id": "1756821507830",
-          "message": "нав шидест",
-          "senderId": "8274"
-        },
-        {
-          "id": "1756884747654",
-          "message": "Салом, икаи дига арзон мекаден",
-          "senderId": "8274"
-        },
-        {
-          "id": "1756898242759",
-          "message": "salom",
-          "senderId": "8274"
-        },
-        {
-          "id": "1756898446355",
-          "message": "vaaleikum",
+          "id": "1757155437706",
+          "message": "Chokadi faza",
           "senderId": "0"
         },
         {
-          "id": "1756898526607",
-          "message": "Arzon namesha",
+          "id": "1757155453455",
+          "message": "Yagon kvartira yofti?",
           "senderId": "0"
         }
       ]
-    },
-    {
-      "id": "1756821611241",
-      "userId": "0",
-      "apartmentId": "1756572964789",
-      "chat": []
-    },
-    {
-      "id": "1756899014881",
-      "userId": "0",
-      "apartmentId": "1756572964789",
-      "chat": []
-    },
-    {
-      "id": "1757050294810",
-      "userId": "0",
-      "apartmentId": "1756572964789",
-      "chat": []
-    },
-    {
-      "id": "1757050296351",
-      "userId": "0",
-      "apartmentId": "1756572964789",
-      "chat": []
-    },
-    {
-      "id": "1757050297881",
-      "userId": "0",
-      "apartmentId": "1756572964789",
-      "chat": []
-    },
-    {
-      "id": "1757050299412",
-      "userId": "0",
-      "apartmentId": "1756572964789",
-      "chat": []
     }
   ]
 }

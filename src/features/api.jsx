@@ -70,10 +70,35 @@ export const api = createApi({
       }),
     }),
     getUserByIds: builder.query({
-      query: (ids) => `/users?${ids.map((id) => `id=${id}`).join("&")}`,
+      query: (ids) => `users?${ids.map((id) => `id=${id}`).join("&")}`,
     }),
     getUsersBySearch: builder.query({
       query: (search) => `users?name=${search}`,
+    }),
+    getUsersChat: builder.query({
+      query: () => "privateChats",
+      transformResponse: (response, meta, arg) => {
+        // ищем чат, где есть оба пользователя
+        return response.filter(
+          (chat) =>
+            chat.participants.includes(arg.userId1) &&
+            chat.participants.includes(arg.userId2)
+        );
+      },
+    }),
+    postMessageByUsers: builder.mutation({
+      query: ({ chatId, message }) => ({
+        url: `privateChats/${chatId}`,
+        method: "PUT",
+        body: message,
+      }),
+    }),
+    createChatUsers: builder.mutation({
+      query: (newChat) => ({
+        url: "privateChats",
+        method: "POST",
+        body: newChat,
+      }),
     }),
   }),
 });
@@ -93,4 +118,7 @@ export const {
   useAddToFriendMutation,
   useGetUserByIdsQuery,
   useGetUsersBySearchQuery,
+  useGetUsersChatQuery,
+  usePostMessageByUsersMutation,
+  useCreateChatUsersMutation,
 } = api;
