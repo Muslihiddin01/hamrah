@@ -94,22 +94,6 @@ const Chat = () => {
     }
   }
 
-  const timeAgo = (timestamp) => {
-    const now = Date.now();
-    const diff = now - timestamp;
-
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(diff / (1000 * 60));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-    if (seconds < 60) return `только что`;
-    if (minutes < 60) return `${minutes} минут назад`;
-    if (hours < 24) return `${hours} часa назад`;
-    if (days > 365) return `больше года`;
-    return `${days} дней назад`;
-  };
-
   if (!user) return null;
 
   return (

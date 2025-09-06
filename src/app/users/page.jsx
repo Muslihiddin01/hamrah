@@ -97,10 +97,12 @@ const UsersPage = () => {
                       : "No apartment"}
                   </td>
                   <td className="px-6 py-4 flex gap-2 justify-center">
-                    <Button size="sm" variant="primary">
-                      Написать
-                    </Button>
-                    <Link href={`/userDetail/${e?.id}`}>
+                    <Link href={`/usersChat/${e.id}`}>
+                      <Button size="sm" variant="primary">
+                        Написать
+                      </Button>
+                    </Link>
+                    <Link href={`/userDetail/${e.id}`}>
                       <Button size="sm" variant="outline">
                         Профиль
                       </Button>
