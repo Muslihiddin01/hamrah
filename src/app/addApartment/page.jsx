@@ -7,6 +7,7 @@ import {
   usePostApartmentMutation,
 } from "@/features/api";
 import { useForm } from "react-hook-form";
+import { SimpleSelect } from "../components/SimpleSelect";
 
 export default function AddApartment() {
   const [user, setUser] = useState(null);
@@ -30,6 +31,8 @@ export default function AddApartment() {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -124,19 +127,22 @@ export default function AddApartment() {
                     <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">
                       Max People
                     </label>
-                    <select
+                    <SimpleSelect
                       {...register("maxPeople", {
-                        required: "Please select max people",
+                        required: "Please select number of maxPeople",
                       })}
-                      className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
+                      value={watch("maxPeople") || ""}
+                      onChange={(value) => setValue("maxPeople", value)}
+                      placeholder="Select number of maxPeople"
+                      className="w-full"
                     >
-                      <option value="">Select number of people</option>
-                      {[1, 2, 3, 4, 5, 6].map((num) => (
-                        <option key={num} value={num}>
+                      <Option value="">Select MaxPeople</Option>
+                      {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                        <Option key={num} value={num}>
                           {num}
-                        </option>
+                        </Option>
                       ))}
-                    </select>
+                    </SimpleSelect>
                     {errors.maxPeople && (
                       <p className="text-red-500 text-sm">
                         {errors.maxPeople.message}
@@ -148,19 +154,22 @@ export default function AddApartment() {
                     <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">
                       Rooms
                     </label>
-                    <select
+                    <SimpleSelect
                       {...register("rooms", {
                         required: "Please select number of rooms",
                       })}
-                      className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
+                      value={watch("rooms") || ""}
+                      onChange={(value) => setValue("rooms", value)}
+                      placeholder="Select number of rooms"
+                      className="w-full"
                     >
-                      <option value="">Select number of rooms</option>
+                      <Option value="">Select number of rooms</Option>
                       {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                        <option key={num} value={num}>
+                        <Option key={num} value={num}>
                           {num}
-                        </option>
+                        </Option>
                       ))}
-                    </select>
+                    </SimpleSelect>
                     {errors.rooms && (
                       <p className="text-red-500 text-sm">
                         {errors.rooms.message}
@@ -230,17 +239,20 @@ export default function AddApartment() {
                     <label className="block text-sm font-medium text-slate-700 mb-2 font-['Inter']">
                       City
                     </label>
-                    <select
+                    <SimpleSelect
                       {...register("city", { required: "City is required" })}
-                      className="w-full border border-gray-300 rounded-xl p-4 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 font-['Open_Sans']"
+                      value={watch("city") || ""}
+                      onChange={(value) => setValue("city", value)}
+                      placeholder="Select a city"
+                      className="w-full"
                     >
-                      <option value="">Select a city</option>
-                      <option value="Dushanbe">Dushanbe</option>
-                      <option value="Kulob">Kulob</option>
-                      <option value="Hisor">Hisor</option>
-                      <option value="Khujand">Khujand</option>
-                      <option value="Vahdat">Vahdat</option>
-                    </select>
+                      <Option value="">Select a city</Option>
+                      <Option value="Dushanbe">Dushanbe</Option>
+                      <Option value="Kulob">Kulob</Option>
+                      <Option value="Hisor">Hisor</Option>
+                      <Option value="Khujand">Khujand</Option>
+                      <Option value="Vahdat">Vahdat</Option>
+                    </SimpleSelect>
                     {errors.city && (
                       <p className="text-red-500 text-sm">
                         {errors.city.message}

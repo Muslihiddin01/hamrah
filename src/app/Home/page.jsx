@@ -32,7 +32,7 @@ const Home = () => {
   const filteredApartments = apartmentss?.filter((apartment) => {
     if (
       filters.location &&
-      !apartment.district.toLowerCase().includes(filters.location.toLowerCase())
+      !apartment.city.toLowerCase().includes(filters.location.toLowerCase())
     )
       return false;
     if (filters.maxPrice && apartment.price > Number(filters.maxPrice))
