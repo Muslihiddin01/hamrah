@@ -174,12 +174,14 @@
         {
           "id": "1757155437706",
           "message": "Chokadi faza",
-          "senderId": "0"
+          "senderId": "0",
+          "read": false
         },
         {
           "id": "1757155453455",
           "message": "Yagon kvartira yofti?",
-          "senderId": "0"
+          "senderId": "0",
+          "read": false
         }
       ]
     }

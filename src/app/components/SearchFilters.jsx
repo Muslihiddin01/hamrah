@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Search, MapPin, Euro, Users } from "lucide-react";
-import { SimpleSelect } from "./SimpleSelect";
+import { SimpleSelect, Option } from "./SimpleSelect";
 const SearchFilters = ({ filters, onFiltersChange }) => {
   const handleInputChange = (key, value) => {
     onFiltersChange({ ...filters, [key]: value });
@@ -26,7 +26,7 @@ const SearchFilters = ({ filters, onFiltersChange }) => {
               placeholder="City, district..."
               value={filters.location}
               onChange={(e) => handleInputChange("location", e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors font-['Open_Sans']"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-1 outline-none focus:ring-emerald-500 focus:border-emerald-500 transition-colors font-['Open_Sans']"
             />
           </div>
         </div>
@@ -47,7 +47,7 @@ const SearchFilters = ({ filters, onFiltersChange }) => {
               placeholder="1000"
               value={filters.maxPrice}
               onChange={(e) => handleInputChange("maxPrice", e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors font-['Open_Sans']"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 transition-colors font-['Open_Sans']  outline-none"
             />
           </div>
         </div>

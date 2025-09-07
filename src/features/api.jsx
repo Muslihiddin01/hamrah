@@ -83,8 +83,8 @@ export const api = createApi({
       transformResponse: (response, meta, arg) => {
         return response.filter(
           (chat) =>
-            chat.participants.includes(arg.userId1) &&
-            chat.participants.includes(arg.userId2)
+            chat.participants.includes(arg?.userId1) &&
+            chat.participants.includes(arg?.userId2)
         );
       },
     }),
@@ -102,6 +102,13 @@ export const api = createApi({
         body: newChat,
       }),
     }),
+   getAllUserChats: builder.query({
+  query: () => `privateChats`,
+  transformResponse: (response, meta, arg) => {
+    return response.filter((chat) => chat.participants.includes(arg));
+  },
+}),
+
   }),
 });
 
@@ -124,4 +131,5 @@ export const {
   useGetUsersChatQuery,
   usePostMessageByUsersMutation,
   useCreateChatUsersMutation,
+  useGetAllUserChatsQuery,
 } = api;

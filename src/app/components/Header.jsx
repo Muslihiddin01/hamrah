@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Menu, X, Home, MessageCircle, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Select from "../components/Select"
+import Select from "../components/Select";
+import Notifications from "../components/Notifications";
 const Header = ({ user, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
@@ -43,10 +44,13 @@ const Header = ({ user, onLogout }) => {
                   <span>Users</span>
                 </Link>
                 <div className="flex items-center space-x-4">
-                  <span className="text-slate-700 font-medium">
-                    Hi, {user.name}
-                  </span>
-                  <Select/>
+                  <Link href={`allUserChats/${user?.id}`}>
+                    <button className="text-slate-700 hover:text-emerald-600 transition-colors font-medium cursor-pointer">
+                      Chats
+                    </button>
+                  </Link>
+                  <Select />
+                  <Notifications />
                   <button
                     onClick={handleLogout}
                     className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors font-medium"

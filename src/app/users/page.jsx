@@ -49,14 +49,14 @@ const UsersPage = () => {
             placeholder="Search by city..."
             value={filterCity}
             onChange={(e) => setFilterCity(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:ring focus:ring-emerald-500 outline-none"
+            className="px-4 py-2 border border-gray-300 rounded-lg hover:border-emerald-600 transition-colors delay-75 focus:ring focus:ring-emerald-500 outline-none"
           />
           <input
             type="text"
             placeholder="Search by name..."
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:ring focus:ring-emerald-500 outline-none"
+            className="px-4 py-2 border border-gray-300 rounded-lg hover:border-emerald-600 transition-colors delay-75 focus:ring focus:ring-emerald-500 outline-none"
           />
         </div>
 
@@ -76,7 +76,7 @@ const UsersPage = () => {
               {filteredUsers?.map((e) => (
                 <tr
                   key={e.id}
-                  className="border-b last:border-none hover:bg-gray-50 transition-colors"
+                  className="border-b border-gray-300 last:border-none hover:bg-gray-50 transition-colors"
                 >
                   <td className="px-6 py-4">
                     <Image
